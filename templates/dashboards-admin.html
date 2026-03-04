@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Administrador{% endblock %}
+
+{% block content %}
+<div class="p-4 bg-dark text-white rounded">
+    <h2 class="mb-3">🛠 Panel de administración</h2>
+    <p>Usuario: {{ user.nombre_alumno }} ({{ user.email }})</p>
+    <p>Rol: {{ user.rol }}</p>
+
+    <hr>
+    <h4>Resumen rápido (demo)</h4>
+    <ul>
+        <li>Número de alumnos registrados: {{ usuarios|length if usuarios is defined else '2 (demo)' }}</li>
+        <li>API protegida con token estático.</li>
+        <li>Entorno preparado para Docker y CI.</li>
+    </ul>
+</div>
+
+<h4 class="mt-4 text-white">Notas (vista admin para su propio usuario)</h4>
+<ul class="text-white">
+    {% for n in notas %}
+        <li>{{ n.asignatura }}: {{ n.nota }}</li>
+    {% else %}
+        <li>No hay notas disponibles.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
