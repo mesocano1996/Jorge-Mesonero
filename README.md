@@ -230,7 +230,7 @@ Instala Python y las dependencias indicadas en requirements.txt.
 Ejecuta automáticamente pytest en cada push o pull_request.
 
 Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado, seguridad básica (OWASP), pruebas automatizadas y despliegue en contenedores.
-## 🤖 CI/CD Automatizado
+##  CI/CD Automatizado
 
 **GitHub Actions** → Tests + Docker en cada push/PR
 
@@ -239,4 +239,5 @@ Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado
 Tests automáticos:
 - 4 pytest → Login + API + Dashboard
 - Docker build
+
 
