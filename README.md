@@ -16,7 +16,7 @@ Simular un ciclo de desarrollo seguro (SECDEVOPS) con:
 - Autenticación y roles (admin / usuario normal).
 - Contenedores Docker para front y back.
 - Entorno virtual de Python.
-- Pruebas automatizadas.
+- Pruebas automatizadas y Postman.
 - Integración continua con GitHub Actions.
 
 
@@ -197,7 +197,7 @@ Acceso autorizado a /api/notas/<email> con token correcto.
 
 Acceso no autorizado sin encabezado X-API-TOKEN.
 
-## 🧪 Tests Automatizados
+## Tests Automatizados
 
 ### Pruebas Unitarias (2)
 - `test_login_correcto.py` → Login válido → Dashboard 200 OK
@@ -211,6 +211,31 @@ Acceso no autorizado sin encabezado X-API-TOKEN.
 
 pip install pytest
 python -m pytest test/ -v
+
+##  Pruebas API con Postman
+
+### Endpoints protegidos
+
+La API backend requiere header `X-API-TOKEN` para autorizar peticiones:
+
+| Endpoint | Método | Autenticación | Respuesta |
+|----------|--------|---------------|-----------|
+| `/api/notas/alumno@colegio.es` | GET | Token requerido | `200 OK` JSON |
+| `/api/asistencia/alumno@colegio.es` | GET | Token requerido | `200 OK` JSON |
+| `/api/notas/*` (sin token) | GET |  Sin token | `401 Unauthorized` |
+
+### Colección Postman
+
+**Archivo:** `postman-gitflow.json` (incluido en repo)
+
+**Importar:**
+1. Postman → **Import** → **File**
+2. Seleccionar `postman-gitflow.json`
+3. Configurar variable `{{api_token}}` con token real
+
+### Tests automatizados
+
+
 
 
  9. Gestión de versiones, GitHub y automatización
@@ -230,7 +255,7 @@ Instala Python y las dependencias indicadas en requirements.txt.
 Ejecuta automáticamente pytest en cada push o pull_request.
 
 Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado, seguridad básica (OWASP), pruebas automatizadas y despliegue en contenedores.
-## 🤖 CI/CD Automatizado
+## CI/CD Automatizado
 
 **GitHub Actions** → Tests + Docker en cada push/PR
 

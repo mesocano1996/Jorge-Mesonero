@@ -1,0 +1,32 @@
+{
+  "info": {
+    "name": "Gitflow API - FUNCIONA",
+    "_postman_id": "final",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "✅ Notas alumno@colegio.es",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "X-API-TOKEN", "value": "TU_TOKEN_AQUI"}],
+        "url": {"raw": "http://127.0.0.1:5001/api/notas/alumno@colegio.es"}
+      }
+    },
+    {
+      "name": "✅ Asistencia alumno@colegio.es", 
+      "request": {
+        "method": "GET",
+        "header": [{"key": "X-API-TOKEN", "value": "TU_TOKEN_AQUI"}],
+        "url": {"raw": "http://127.0.0.1:5001/api/asistencia/alumno@colegio.es"}
+      }
+    },
+    {
+      "name": "❌ 401 Sin token",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "http://127.0.0.1:5001/api/notas/alumno@colegio.es"}
+      }
+    }
+  ]
+}
