@@ -7,7 +7,7 @@ La aplicación gestiona usuarios de un colegio (alumnos y administrador), permit
 
 ---
 
-## 1. Objetivo de la práctica
+1. Objetivo de la práctica
 
 Simular un ciclo de desarrollo seguro (SECDEVOPS) con:
 
@@ -23,7 +23,7 @@ Simular un ciclo de desarrollo seguro (SECDEVOPS) con:
 
 ---
 
-## 2. Estructura del proyecto
+2. Estructura del proyecto
 
 ```text
 gitflow-proyect/
@@ -67,7 +67,8 @@ python -m venv .venv
 .\.venv\Scripts\Activate
 pip install -r requirements.txt
 
-## 4. Autenticación del usuario y autorización 
+4. Autenticación del usuario y autorización 
+
 La aplicación implementa:
 
 Registro y login de usuarios mediante formularios Flask.
@@ -92,7 +93,7 @@ Si el usuario tiene rol admin, el dashboard utiliza una plantilla distinta (dash
 
 El acceso a /dashboard comprueba siempre que haya sesión; si no la hay, redirige a /login.
 
-## 5. Arquitectura front–back y API segura
+5. Arquitectura front–back y API segura
 
 La aplicación se divide en dos componentes:
 
@@ -130,7 +131,7 @@ Si el token no coincide, la API devuelve 401 Unauthorized.
 
 Con esto se cumple el requisito de tener un front Flask que se comunique con un back a través de una API utilizando un mecanismo seguro.
 
-##. Aplicaciones en contenedores
+6. Aplicaciones en contenedores
 
 Se han creado dos imágenes Docker:
 
@@ -150,7 +151,7 @@ Backend API: http://127.0.0.1:5001 (puerto host 5001 → contenedor 5001).
 
 Dentro de la red de Docker, el frontend se comunica con el backend usando el nombre de servicio backend en el puerto 5001.
 
-## 7. 7. OWASP Top 10 (web y APIs).
+7. 7. OWASP Top 10 (web y APIs).
 
 En owasp-seguridad.md se documenta cómo se han tenido en cuenta varios puntos de OWASP Top 10 para aplicaciones web y APIs. Resumen:
 
@@ -212,7 +213,7 @@ pip install pytest
 python -m pytest test/ -v
 
 
-## 9.  9. Gestión de versiones, GitHub y automatización
+ 9. Gestión de versiones, GitHub y automatización
 
 El proyecto se ha versionado con git:
 
