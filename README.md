@@ -26,10 +26,14 @@ Simular un ciclo de desarrollo seguro (SECDEVOPS) con:
 2. Estructura del proyecto
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ``` text
 =======
 ```bash
 >>>>>>> 6614d0d224968eddf9b102a819d1110df5e53acf
+=======
+```
+>>>>>>> b465dd7a735cd5a6656b7e0430b3c543d98d22ac
 gitflow-proyect/
 ├── app.py                   # Frontend Flask (web)
 ├── backend_api.py           # API backend
@@ -61,6 +65,10 @@ gitflow-proyect/
 ```
  
 
+<<<<<<< HEAD
+=======
+````
+>>>>>>> b465dd7a735cd5a6656b7e0430b3c543d98d22ac
 
 
 <<<<<<< HEAD
@@ -149,11 +157,17 @@ Se han creado dos imágenes Docker:
 Dockerfile.front → imagen para el frontend Flask.
 
 Dockerfile.api → imagen para el backend API.
-
+```
 El fichero docker-compose.yml orquesta ambos servicios:
+<<<<<<< HEAD
 ```
 
+=======
+
+```
+>>>>>>> b465dd7a735cd5a6656b7e0430b3c543d98d22ac
 docker-compose up --build
+```
 Configuración típica:
 
 Frontend Flask: http://127.0.0.1:8000 (puerto host 8000 → contenedor 5000).
@@ -169,23 +183,67 @@ En owasp-seguridad.md se documenta cómo se han tenido en cuenta varios puntos d
 7.1 Aplicación web
 A01 – Broken Access Control
 Se valida la existencia de sesión en /dashboard y se diferencia el rol admin del rol alumno para mostrar vistas distintas.
+```
+# En /dashboard
+if 'user' not in session:
+    return redirect(url_for('login'))
 
+# En /admin y /admin/notas/<alumno_email>
+if 'user' not in session or session['user']['rol'] != 'admin':
+    flash("❌ Acceso denegado. Solo admins.", "error")
+    return redirect(url_for('dashboard'))
+```
 A02 – Cryptographic Failures
 Las contraseñas se almacenan en la base de datos utilizando generate_password_hash, evitando guardar texto plano.
+```
+# En registro y creación admin
+password_hash=generate_password_hash(password)
 
+# En modelo Usuario
+def comprobar_password(self, password):
+    return check_password_hash(self.password_hash, password)
+
+```
 A03 – Injection
 El acceso a la base de datos se realiza mediante SQLAlchemy, sin construir consultas SQL concatenando cadenas.
+```
+# ORM SQLAlchemy evita concatenación SQL
+user = Usuario.query.filter_by(email=email).first()
+db.session.add(nuevo)
+db.session.commit()
 
+```
 A05 – Security Misconfiguration
 El modo debug solo se usa en desarrollo. No se muestran trazas internas al usuario final.
+```
+# Debug solo desarrollo (desactivar en prod)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
+```
 7.2 API
 Autenticación de la API
 Todos los endpoints /api/... exigen el encabezado X-API-TOKEN. Si falta o es incorrecto, la API devuelve 401 Unauthorized.
+```
+# backend_api.py
+API_TOKEN = "super-api-token-123"
 
+def check_token():
+    token = request.headers.get("X-API-TOKEN")
+    return token == API_TOKEN
+
+@app.before_request
+def require_token():
+    if request.path.startswith("/api/"):
+        if not check_token():
+            return jsonify({"error": "Unauthorized"}), 401
+```
 Gestión de errores
 La API devuelve respuestas JSON simples ({"error": "Unauthorized"}) sin detalles internos de excepciones ni stacktraces.
-
+```
+# Respuesta simple sin stacktraces
+return jsonify({"error": "Unauthorized"}), 401
+```
 ## 8. Las pruebas se han implementado con pytest y se ejecutan con:
 
 pytest
@@ -195,11 +253,11 @@ Contenido principal:
 tests/test_auth.py
 ```
 Pruebas del flujo de autenticación en app.py mediante test_client():
-
+```
 Login correcto con credenciales válidas.
 
 Login incorrecto con contraseña errónea.
-
+```
 tests/test_api.py
 
 Pruebas de la API backend (backend_api.py):
@@ -207,7 +265,8 @@ Pruebas de la API backend (backend_api.py):
 Acceso autorizado a /api/notas/<email> con token correcto.
 
 Acceso no autorizado sin encabezado X-API-TOKEN.
-
+```
+```
 ## Tests Automatizados
 
 ### Pruebas Unitarias (2)
@@ -222,7 +281,8 @@ Acceso no autorizado sin encabezado X-API-TOKEN.
 
 pip install pytest
 python -m pytest test/ -v
-
+```
+```
 ##  Pruebas API con Postman
 
 ### Endpoints protegidos
@@ -243,11 +303,11 @@ La API backend requiere header `X-API-TOKEN` para autorizar peticiones:
 1. Postman → **Import** → **File**
 2. Seleccionar `postman-gitflow.json`
 3. Configurar variable `{{api_token}}` con token real
-
+```
 ### Tests automatizados
-
-
-
+```
+pytest tests/ -v --tb=no
+```
 
  9. Gestión de versiones, GitHub y automatización
 
@@ -255,9 +315,9 @@ El proyecto se ha versionado con git:
 
 Rama principal main.
 
-Ramas de características (feature/tests, feature/docker, etc.) que se han fusionado después en main siguiendo un flujo similar a git-flow.
+Ramas de características (Jorge1, Jorge2, etc.) que se han fusionado después en main siguiendo un flujo similar a git-flow.
 
-El código se ha subido a GitHub en un repositorio privado para poder reproducir el proyecto en otro entorno.
+El código se ha subido a GitHub en un repositorio público para poder reproducir el proyecto en otro entorno.
 
 Se ha configurado un workflow de GitHub Actions (.github/workflows/tests.yml) que:
 
@@ -267,15 +327,16 @@ Ejecuta automáticamente pytest en cada push o pull_request.
 
 Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado, seguridad básica (OWASP), pruebas automatizadas y despliegue en contenedores.
 ## CI/CD Automatizado
-
+```
 **GitHub Actions** → Tests + Docker en cada push/PR
-
+```
 [![CI Tests](https://github.com/mesocano1996/gitflow-proyect/actions/workflows/ci.yml/badge.svg)](https://github.com/mesocano1996/gitflow-proyect/actions)
 
 Tests automáticos:
 - 4 pytest → Login + API + Dashboard
 - Docker build
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 
@@ -284,3 +345,5 @@ Tests automáticos:
 
 =======
 >>>>>>> 6614d0d224968eddf9b102a819d1110df5e53acf
+=======
+>>>>>>> b465dd7a735cd5a6656b7e0430b3c543d98d22ac
