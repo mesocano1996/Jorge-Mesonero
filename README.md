@@ -50,10 +50,12 @@ gitflow-proyect/
 │   ├── register.html
 │   ├── dashboard.html
 │   └── dashboard-admin.html
+     |__admin.html 
 └── tests/
     ├── test_auth.py
     └── test_api.py
     ├── test_dash_api.py
+<<<<<<< HEAD
 │ └── test_api_auth.py
  templates/ # HTML Bootstrap 5
     ├── base.html # Layout común + navbar
@@ -64,6 +66,9 @@ gitflow-proyect/
     └── dashboard-admin.html # Admin (mismo + extras)
 ```
  
+=======
+    └── test_api_auth.py
+>>>>>>> a3514c674cc94aecb22547141df74ac83d69c832
 
 <<<<<<< HEAD
 =======
@@ -85,6 +90,9 @@ Pasos usados:
 python -m venv .venv
 .\.venv\Scripts\Activate
 pip install -r requirements.txt
+python app.py
+python backend_api.py
+docker compose up --build
 ```
 4. Autenticación del usuario y autorización 
 
@@ -108,7 +116,7 @@ Al autenticarse, se guarda en session un diccionario con email, nombre_alumno, c
 
 Las vistas indican qué usuario se ha identificado.
 
-Si el usuario tiene rol admin, el dashboard utiliza una plantilla distinta (dashboard-admin.html) y un estilo diferenciado (color de fondo / tarjeta distinta).
+Si el usuario tiene rol admin, el dashboard utiliza una plantilla distinta (dashboard-admin.html) y un estilo diferenciado (color de fondo / tarjeta distinta), además acceso a la lista de alumnos de su curso (admin.html).
 
 El acceso a /dashboard comprueba siempre que haya sesión; si no la hay, redirige a /login.
 
@@ -337,6 +345,7 @@ Tests automáticos:
 - Docker build
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 
@@ -347,3 +356,8 @@ Tests automáticos:
 >>>>>>> 6614d0d224968eddf9b102a819d1110df5e53acf
 =======
 >>>>>>> b465dd7a735cd5a6656b7e0430b3c543d98d22ac
+=======
+
+
+
+>>>>>>> a3514c674cc94aecb22547141df74ac83d69c832
