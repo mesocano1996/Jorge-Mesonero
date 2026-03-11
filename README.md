@@ -60,6 +60,9 @@ Pasos usados:
 python -m venv .venv
 .\.venv\Scripts\Activate
 pip install -r requirements.txt
+python app.py
+python backend_api.py
+docker compose up --build
 ```
 4. Autenticación del usuario y autorización 
 
@@ -305,5 +308,6 @@ Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado
 Tests automáticos:
 - 4 pytest → Login + API + Dashboard
 - Docker build
+
 
 
