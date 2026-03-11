@@ -42,18 +42,12 @@ gitflow-proyect/
 │   ├── register.html
 │   ├── dashboard.html
 │   └── dashboard-admin.html
+     |__admin.html 
 └── tests/
     ├── test_auth.py
     └── test_api.py
     ├── test_dash_api.py
-│ └── test_api_auth.py
- templates/ # HTML Bootstrap 5
-    ├── base.html # Layout común + navbar
-    ├── index.html # Home público
-    ├── login.html # Formulario login
-    ├── register.html # Formulario registro
-    ├── dashboard.html # Alumno (notas+asistencia API)
-    └── dashboard-admin.html # Admin (mismo + extras)
+    └── test_api_auth.py
 
 ````
 
@@ -311,4 +305,5 @@ Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado
 Tests automáticos:
 - 4 pytest → Login + API + Dashboard
 - Docker build
+
 
