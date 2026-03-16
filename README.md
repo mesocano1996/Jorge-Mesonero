@@ -302,4 +302,4 @@ Con esto se completa un ciclo de SECDEVOPS a pequeña escala: desarrollo aislado
 
 Tests automáticos:
 - 4 pytest → Login + API + Dashboard
-- Docker build
+- Docker build.
