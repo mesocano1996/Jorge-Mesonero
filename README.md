@@ -25,7 +25,7 @@ Simular un ciclo de desarrollo seguro (SECDEVOPS) con:
 
 2. Estructura del proyecto
 
-```text
+```
 gitflow-proyect/
 ├── app.py                   # Frontend Flask (web)
 ├── backend_api.py           # API backend
@@ -55,18 +55,18 @@ gitflow-proyect/
     ├── dashboard.html # Alumno (notas+asistencia API)
     └── dashboard-admin.html # Admin (mismo + extras)
 
-text
+```
 
 ## 3. Entornos virtuales / contenedores de desarrollo 
 
 El desarrollo se ha aislado usando un entorno virtual de Python (venv) para no mezclar dependencias con otros proyectos.
 
 Pasos usados:
-
+```
 python -m venv .venv
 .\.venv\Scripts\Activate
 pip install -r requirements.txt
-
+```
 4. Autenticación del usuario y autorización 
 
 La aplicación implementa:
@@ -99,7 +99,7 @@ La aplicación se divide en dos componentes:
 
 5.1 Frontend (app.py)
 Rutas principales:
-
+```
 / – página de inicio.
 
 /register – registro de alumnos.
@@ -113,14 +113,14 @@ Rutas principales:
 Plantillas Jinja2 (templates/*.html) para el contenido HTML.
 
 Obtiene las notas y la asistencia del usuario llamando a la API backend.
-
+```
 5.2 Backend API (backend_api.py)
 Endpoints de ejemplo:
-
+```
 GET /api/notas/<email>
 
 GET /api/asistencia/<email>
-
+```
 Devuelven datos en formato JSON (datos de demostración definidos en memoria).
 
 Todos los endpoints /api/... están protegidos por un token estático:
@@ -134,21 +134,21 @@ Con esto se cumple el requisito de tener un front Flask que se comunique con un 
 6. Aplicaciones en contenedores
 
 Se han creado dos imágenes Docker:
-
+```
 Dockerfile.front → imagen para el frontend Flask.
 
 Dockerfile.api → imagen para el backend API.
 
 El fichero docker-compose.yml orquesta ambos servicios:
-
+```
 
 docker-compose up --build
 Configuración típica:
-
+```
 Frontend Flask: http://127.0.0.1:8000 (puerto host 8000 → contenedor 5000).
 
 Backend API: http://127.0.0.1:5001 (puerto host 5001 → contenedor 5001).
-
+```
 Dentro de la red de Docker, el frontend se comunica con el backend usando el nombre de servicio backend en el puerto 5001.
 
 7. 7. OWASP Top 10 (web y APIs).
@@ -158,23 +158,64 @@ En owasp-seguridad.md se documenta cómo se han tenido en cuenta varios puntos d
 7.1 Aplicación web
 A01 – Broken Access Control
 Se valida la existencia de sesión en /dashboard y se diferencia el rol admin del rol alumno para mostrar vistas distintas.
+```
+# En /dashboard
+if 'user' not in session:
+    return redirect(url_for('login'))
 
+# En /admin y /admin/notas/<alumno_email>
+if 'user' not in session or session['user']['rol'] != 'admin':
+    flash("❌ Acceso denegado. Solo admins.", "error")
+    return redirect(url_for('dashboard'))
+```
 A02 – Cryptographic Failures
 Las contraseñas se almacenan en la base de datos utilizando generate_password_hash, evitando guardar texto plano.
+```
+# En registro y creación admin
+password_hash=generate_password_hash(password)
 
+# En modelo Usuario
+def comprobar_password(self, password):
+    return check_password_hash(self.password_hash, password)
+```
 A03 – Injection
 El acceso a la base de datos se realiza mediante SQLAlchemy, sin construir consultas SQL concatenando cadenas.
-
+```
+# ORM SQLAlchemy evita concatenación SQL
+user = Usuario.query.filter_by(email=email).first()
+db.session.add(nuevo)
+db.session.commit()
+```
 A05 – Security Misconfiguration
 El modo debug solo se usa en desarrollo. No se muestran trazas internas al usuario final.
-
+```
+# Debug solo desarrollo (desactivar en prod)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+```
 7.2 API
 Autenticación de la API
 Todos los endpoints /api/... exigen el encabezado X-API-TOKEN. Si falta o es incorrecto, la API devuelve 401 Unauthorized.
+# backend_api.py
+```
+API_TOKEN = "super-api-token-123"
 
+def check_token():
+    token = request.headers.get("X-API-TOKEN")
+    return token == API_TOKEN
+
+@app.before_request
+def require_token():
+    if request.path.startswith("/api/"):
+        if not check_token():
+            return jsonify({"error": "Unauthorized"}), 401
+```
 Gestión de errores
 La API devuelve respuestas JSON simples ({"error": "Unauthorized"}) sin detalles internos de excepciones ni stacktraces.
-
+```
+# Respuesta simple sin stacktraces
+return jsonify({"error": "Unauthorized"}), 401
+```
 ## 8. Las pruebas se han implementado con pytest y se ejecutan con:
 
 pytest
@@ -198,7 +239,7 @@ Acceso autorizado a /api/notas/<email> con token correcto.
 Acceso no autorizado sin encabezado X-API-TOKEN.
 
 ## Tests Automatizados
-
+```
 ### Pruebas Unitarias (2)
 - `test_login_correcto.py` → Login válido → Dashboard 200 OK
 - `test_login_incorrecto.py` → Login inválido → Alert danger
@@ -211,7 +252,7 @@ Acceso no autorizado sin encabezado X-API-TOKEN.
 
 pip install pytest
 python -m pytest test/ -v
-
+```
 ##  Pruebas API con Postman
 
 ### Endpoints protegidos
@@ -231,9 +272,7 @@ La API backend requiere header `X-API-TOKEN` para autorizar peticiones:
 **Importar:**
 1. Postman → **Import** → **File**
 2. Seleccionar `postman-gitflow.json`
-3. Configurar variable `{{api_token}}` con token real
-
-### Tests automatizados
+3. Configurar variable `{{api_token}}` con token real.
 
 
 
