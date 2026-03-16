@@ -1,24 +1,42 @@
-name: CI/CD OWASP Simple
+name: CI/CD Tests OWASP
 
 on:
   push:
-    branches: [ main, develop, Jorge1 ]
+    branches: [ main, develop, Jorge1 ]  # ← Incluye tu rama
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  lint-security:
+  test:
     runs-on: ubuntu-latest
+    
     steps:
     - uses: actions/checkout@v4
     
-    - name: Python syntax check
-      run: |
-        find . -name "*.py" -exec python -m py_compile {} \;
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
     
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt pytest pytest-cov requests flask
+    
+    - name: Run Tests
+      run: |
+        pytest test/ -v --cov=app --cov-report=xml --tb=no || pytest test/ -v  # test/ no tests/
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+      if: success()
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
     - name: Bandit security scan
       uses: pre-commit/action@v3.0.1
       with:
         extra_args: bandit -r . --format json
-        
-    - name: Check Python files exist
-      run: |
-        find . -name "*.py" | head -10 || echo "No Python files found"
