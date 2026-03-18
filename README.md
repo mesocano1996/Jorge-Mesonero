@@ -34,9 +34,10 @@ gitflow-proyect/
 ├── Dockerfile.api
 ├── docker-compose.yml
 ├── README.md
-   
+|-- Postma.json
+|-- github
+    |- main.yml
 ├── templates/
-│   ├── base.html
 │   ├── index.html
 │   ├── login.html
 │   ├── register.html
@@ -46,14 +47,7 @@ gitflow-proyect/
     ├── test_auth.py
     └── test_api.py
     ├── test_dash_api.py
-│ └── test_api_auth.py
- templates/ # HTML Bootstrap 5
-    ├── base.html # Layout común + navbar
-    ├── index.html # Home público
-    ├── login.html # Formulario login
-    ├── register.html # Formulario registro
-    ├── dashboard.html # Alumno (notas+asistencia API)
-    └── dashboard-admin.html # Admin (mismo + extras)
+    └── test_api_auth.py
 
 ```
 
@@ -67,7 +61,7 @@ python -m venv .venv
 .\.venv\Scripts\Activate
 pip install -r requirements.txt
 ```
-4. Autenticación del usuario y autorización 
+##4. Autenticación del usuario y autorización 
 
 La aplicación implementa:
 
