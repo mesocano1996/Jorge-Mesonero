@@ -1,0 +1,26 @@
+name: Tests + OWASP + Docker
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Python deps
+      run: |
+        pip install flask flask-sqlalchemy pytest requests werkzeug
+    
+    - name: Run ALL tests
+      run: |
+        pytest -v --tb=short --cov=app --cov-report=html
+        pytest test/ -v
+      
+    - name: OWASP Check
+      run: |
+        pip install bandit
+        bandit -r . -f json -o owasp-report.json || true
+    
+    - name: Build Docker
+      run: docker build -t colegio-app .
